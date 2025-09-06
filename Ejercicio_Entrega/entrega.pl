@@ -8,6 +8,9 @@ pelicula(forrest_gump,drama). % e)
 director(steven_spielberg,jurassic_park). % f)
 pelicula(jurassic_park,aventura). % g)
 
+%Hechos extras
+actor(leonardo_dicaprio,jurassic_park).
+
 % Parte 2 - Consultas sobre Hechos
 
 % a) 
@@ -22,3 +25,16 @@ pelicula(jurassic_park,aventura). % g)
 % c) 
 % ?- pelicula(TituloPelicula, Genero). 
 % Devuelve: 
+% ?- pelicula(TituloPelicula,Genero).
+% TituloPelicula = inception,
+% Genero = ciencia_ficcion ;
+% TituloPelicula = forrest_gump,
+% Genero = drama ;
+% TituloPelicula = jurassic_park,
+% Genero = aventura.
+
+% d)
+% ?-actor(NombreActor,inception),actor(NombreActor,OtraPelicula), OtraPelicula \= inception
+% Devuelve: NO SE PUDO, NO ME PERMITE EJECUTAR
+
+% Parte 3 - Definir reglas
