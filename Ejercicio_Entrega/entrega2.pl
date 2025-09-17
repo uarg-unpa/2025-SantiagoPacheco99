@@ -53,6 +53,15 @@ fail.  % Fuerza fracaso si no existe
 % Eliminamos el libro "el_principito"
 % Se ejecuta --> Libro el_principito está prestado
 
+% Ejercicio Adicional: Agrega un procedimiento propio eliminar_prestamo(Titulo) usando 
+% retract(prestado(Titulo, _)) y pruébalo (e.g., ?- eliminar_prestamo("el_principito").). 
+
+eliminar_prestamo(Titulo) :- 
+    retract(prestado(Titulo,_)).
+
+% Nos permite eliminar el prestamo del libro "el_principito"
+% Entonces cuando eliminamos el libro, nos lo permitirá hacer
+
 % --------------------PARTE 2 - Uso de CUT para Control de Flujo-------------------
 
 producto(laptop, 800).  % producto(Nombre, Precio) 
@@ -60,8 +69,53 @@ producto(celular, 300).
 producto(tablet, 150). 
 
 
+:- dynamic producto/2.
+clasificar(Producto, Categoria) :-  
+producto(Producto, Precio),  
+Precio > 500,  
+Categoria = caro,
+!. % cut: no seguir probando mas reglas si ya fue clasificado (No backtrack si caro)
 
+clasificar(Producto, Categoria) :-  
+producto(Producto, Precio),  
+Precio >= 200, Precio =< 500,  
+Categoria = medio,
+!.  % Cut: No backtrack si medio
 
+clasificar(Producto, Categoria) :-  
+producto(Producto, Precio),  
+Precio < 200,  
+Categoria = barato. 
 
+% Prueba: Ejecuta ?- clasificar(laptop, C).  
+% Explica qué pasa sin cut 
+% Elimina un cut y prueba para ver la diferencia. 
 
+% Prueba sin cut:
+% clasificar(laptop, C).
+% Salida: C=caro; 
+% false
 
+% Prueba con cut:
+% clasificar(laptop, C).
+% Salida: C=caro; 
+
+% La diferencia es que sin el cut se realiza el backtracking, probando las demás reglas.
+% En cambio, con el cut servirá para controlar el flujo y evitar respuestas multiples innecesarias.
+
+% Ejercicio Adicional: Agrega una regla propia con cut,, es_oferta(Producto) si precio < 300, 
+% usando cut para cortar si no es oferta. 
+
+es_oferta(Producto) :- 
+producto(Producto, Precio), 
+Precio < 300, 
+!,
+write(Producto), write(" está en oferta"),nl.
+
+es_oferta(Producto) :-
+    write(Producto), write(" NO está en oferta"),nl.
+
+% Aplicado al producto tablet:
+
+% es_oferta(tables).
+% Saldia: tablet está en oferta
