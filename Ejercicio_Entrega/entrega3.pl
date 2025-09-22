@@ -56,7 +56,7 @@ listar_productos :-
     fail.
 listar_productos.
 
-% Implementar un predicado recursivo “aumento_productos” que aplique un aumento del 
+% 2) Implementar un predicado recursivo “aumento_productos” que aplique un aumento del 
 % 5% a todos los productos de la categoría E, actualizando sus precios en la base de hechos 
 % utilizando retract y assert. 
 
@@ -65,10 +65,14 @@ aumentar_productos :-
     \+ producto(_, _, e), !.
 
 aumentar_productos :-
-    producto(Nombre, Precio, e),           % encuentra un producto 'e'
-    retract(producto(Nombre, Precio, e)),  % lo elimina
-    PrecioNuevo is Precio * 1.05,          % calcula nuevo precio
-    assert(producto(Nombre, PrecioNuevo, e)), 
-    aumentar_productos.                     % sigue con los demás
-aumentar_productos.                         % caso base implícito
+    producto(Nombre, Precio, e),
+    retract(producto(Nombre, Precio, e)),   % Elimina el producto de la base de hechos
+    PrecioNuevo is Precio * 1.05, 
+    retractall(producto(Nombre, _, e_nuevo)),  % Elimina duplicados previos
+    assertz(producto(Nombre, PrecioNuevo, e_nuevo)),
+    aumentar_productos.
+
+% Primero ponemos "listar_productos."
+% Luego ponemos "aumentar_productos."
+% Por último, volvemos a poner "listar_productos." --> Muestra los precios actualizados de la categoria E        
 
